@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0a12">
+<title>Routinely — Design Your Day</title>
+<style>
+:root {
+  --bg:#0b0a12; --panel:#151320; --panel2:#201b30;
+  --line:#302a40; --text:#f7f3ff; --muted:#a39bb8;
+  --purple:#a68aff; --lime:#d4ff70; --pink:#ff91ce;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:radial-gradient(ellipse at 80% 0%,#40245c55,transparent 38%),var(--bg);
+  color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;
+  min-height:100vh;transition:background .3s,color .3s
+}
+button,input,select{font:inherit}
+button{cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--purple)}
+.app{display:grid;grid-template-columns:235px 1fr;max-width:1500px;margin:auto;min-height:100vh}
+.sidebar{padding:26px 16px;border-right:1px solid #ffffff12;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:28px;background:#0b0a12c9;backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:11px;padding:0 8px}
+.logo{width:39px;height:39px;border-radius:14px;background:linear-gradient(135deg,#d2c3ff,#815eff);display:grid;place-items:center;color:#201434;font-weight:900;font-size:22px}
+.brand b{letter-spacing:.13em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.1em}
+.nav-label{font-size:10px;letter-spacing:.17em;color:#827a96;padding:0 12px;margin-bottom:8px}
+.nav{display:grid;gap:6px}
+.nav button{background:transparent;border:1px solid transparent;color:var(--muted);text-align:left;border-radius:13px;padding:12px;display:flex;align-items:center;gap:12px}
+.nav button:hover,.nav button.active{background:#a68aff19;color:var(--text);border-color:#a68aff35}
+.nav button.active{box-shadow:inset 3px 0 var(--purple)}
+.nav-icon{font-size:18px;width:23px;text-align:center}
+.nav-count{margin-left:auto;color:var(--lime);font-size:11px}
+.sidebar-bottom{margin-top:auto;background:linear-gradient(135deg,#302347,#171420);padding:17px;border:1px solid #ffffff13;border-radius:18px}
+.sidebar-bottom p{font-size:12px;color:var(--muted)}
+.main{min-width:0;padding:25px clamp(15px,3vw,45px) 90px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;gap:12px}
+.muted{color:var(--muted);font-size:12px}
+.actions{display:flex;gap:8px}
+.icon-btn,.avatar{width:39px;height:39px;border-radius:12px;border:1px solid var(--line);background:#ffffff08;display:grid;place-items:center}
+.avatar{background:linear-gradient(135deg,#d8c5ff,#9875ff);color:#24153a;border:0;font-weight:800}
+.page{display:none;animation:appear .25s ease}.page.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:10px;color:var(--purple);letter-spacing:.17em;font-weight:800}
+.heading{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;margin-bottom:23px}
+h1{font-size:clamp(29px,4vw,42px);letter-spacing:-.045em;line-height:1.15;margin:8px 0}
+h2{font-size:19px;letter-spacing:-.025em;margin:0}
+h3{font-size:15px;margin:0}
+p{margin:7px 0}
+.heading p{color:var(--muted);font-size:13px}
+.btn{border:1px solid var(--line);background:#ffffff08;border-radius:12px;padding:10px 14px;font-weight:700;font-size:12px;transition:.2s}
+.btn:hover{transform:translateY(-1px);border-color:var(--purple)}
+.btn.primary{background:linear-gradient(120deg,#c4b0ff,#9874ff);color:#211536;border:0}
+.btn.lime{background:var(--lime);color:#202a0b;border:0}
+.btn.danger{color:#ff9cae}
+.card{min-width:0;padding:21px;border:1px solid #ffffff10;border-radius:21px;background:linear-gradient(145deg,#1b1728ee,#13111bee);box-shadow:0 15px 45px #0002}
+.grid{display:grid;gap:15px}
+.hero-grid{grid-template-columns:1.35fr .8fr}
+.hero{min-height:245px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 95% 10%,#a68aff35,transparent 44%),linear-gradient(135deg,#29203e,#15131e)}
+.hero:after{content:"";position:absolute;width:190px;height:190px;border:1px solid #a68aff19;border-radius:50%;right:-50px;bottom:-110px;box-shadow:0 0 0 25px #a68aff09,0 0 0 50px #a68aff06;pointer-events:none}
+.hero h2{font-size:clamp(27px,3vw,38px);line-height:1.15;margin:12px 0;letter-spacing:-.045em}
+.hero p{max-width:420px;color:var(--muted);font-size:13px;margin-bottom:20px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.center{text-align:center}
+.card-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:17px}
+.ring{width:142px;height:142px;border-radius:50%;display:grid;place-items:center;margin:10px auto;background:conic-gradient(var(--purple) var(--progress,0deg),#302a40 0);position:relative;transition:background .4s}
+.ring:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#171420}
+.ring-inner{position:relative}.ring strong{display:block;font-size:35px;letter-spacing:-.05em}.ring small{font-size:10px;color:var(--muted);letter-spacing:.12em}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin:16px 0 28px}
+.stat{border:1px solid #ffffff10;border-radius:17px;padding:17px;background:#ffffff04}
+.stat-top{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);gap:5px}
+.stat-icon{width:30px;height:30px;border-radius:10px;background:#a68aff1b;color:#d1c2ff;display:grid;place-items:center}
+.stat strong{display:block;font-size:25px;margin:10px 0 2px;letter-spacing:-.04em}
+.stat small{font-size:10px;color:var(--lime)}
+.two-col{grid-template-columns:1.2fr .8fr}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:27px 0 13px}
+.section-head p{font-size:12px;color:var(--muted)}
+.task-list,.habit-list{display:grid;gap:9px}
+.task{display:grid;grid-template-columns:52px 3px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px 9px;border:1px solid #ffffff0a;background:#ffffff04;border-radius:14px}
+.task-time{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.task-line{height:36px;background:var(--task-color,var(--purple));border-radius:5px}
+.task-title{font-size:12px;font-weight:750}
+.task-meta{font-size:10px;color:var(--muted);margin-top:3px}
+.task.completed .task-title{text-decoration:line-through;color:#918aa1}
+.check{width:28px;height:28px;border:1px solid #514862;border-radius:9px;background:transparent;color:var(--muted)}
+.check.done{background:var(--purple);color:#1c1230;border-color:var(--purple)}
+.habit{display:flex;align-items:center;gap:11px}
+.emoji{width:42px;height:42px;border-radius:13px;background:#a68aff19;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.habit-info{flex:1;min-width:0}.habit-info strong{font-size:12px;display:block}.habit-info small{font-size:10px;color:var(--muted)}
+.habit-check{border:1px solid var(--line);border-radius:10px;width:29px;height:29px;background:transparent;color:var(--muted)}
+.habit-check.done{background:var(--lime);color:#1d260b;border-color:var(--lime)}
+.bar-wrap{height:5px;border-radius:8px;background:#ffffff10;overflow:hidden;margin-top:8px}
+.bar{height:100%;background:linear-gradient(90deg,var(--purple),#c7b7ff);border-radius:8px;transition:width .4s}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+.filter{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:10px;padding:8px 12px;font-size:11px}
+.filter.active{background:#a68aff22;color:#e0d5ff;border-color:#a68aff65}
+.habit-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.habit-card{position:relative}
+.habit-card .emoji{width:48px;height:48px;font-size:23px;margin-bottom:15px}
+.habit-card h3{font-size:14px;padding-right:22px}
+.habit-card p{font-size:11px;color:var(--muted);min-height:30px}
+.habit-card .streak{font-size:11px;color:var(--lime);margin-top:12px}
+.habit-card .habit-check{position:absolute;right:16px;top:16px}
+.timer-layout{grid-template-columns:1.1fr .8fr}
+.timer-card{text-align:center;padding:clamp(20px,4vw,40px)}
+.timer-modes{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
+.timer-face{font-size:clamp(65px,9vw,95px);font-weight:800;letter-spacing:-.08em;font-variant-numeric:tabular-nums;margin:24px 0 10px;line-height:1.1}
+.orb{width:105px;height:105px;border-radius:50%;margin:24px auto 15px;background:radial-gradient(circle at 35% 25%,#e0d5ff,#a68aff 45%,#5e3ab9);box-shadow:0 0 0 14px #a68aff0c,0 0 50px #a68aff35;display:grid;place-items:center;font-size:35px}
+.chart{height:185px;display:flex;align-items:end;gap:15px;padding:18px 5px 0;border-bottom:1px solid var(--line)}
+.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%;gap:8px;min-width:0}
+.chart-bar{width:min(100%,35px);min-height:3px;border-radius:8px 8px 2px 2px;background:linear-gradient(180deg,#c6b5ff,#7956dc)}
+.chart-label,.chart-value{font-size:10px;color:var(--muted)}
+.insights{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px}
+.insight{padding:16px;border:1px solid #ffffff0d;background:#ffffff04;border-radius:15px}
+.insight span{font-size:11px;color:var(--muted)}.insight strong{display:block;font-size:24px;margin-top:6px}
+.field{display:grid;gap:6px;margin-bottom:13px}
+.field label{font-size:12px;color:var(--muted)}
+.field input,.field select{width:100%;padding:12px;border-radius:11px;border:1px solid var(--line);background:#0e0c16;color:var(--text)}
+.settings-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid #ffffff0c}
+.settings-row:last-child{border:0}.settings-row strong{font-size:12px}.settings-row p{font-size:11px;color:var(--muted)}
+.switch{width:43px;height:25px;border:0;border-radius:20px;background:#393346;padding:3px;flex-shrink:0}
+.switch:after{content:"";display:block;width:19px;height:19px;background:white;border-radius:50%;transition:.2s}
+.switch.on{background:var(--purple)}.switch.on:after{transform:translateX(18px);background:#241735}
+.empty{text-align:center;padding:32px 15px;color:var(--muted);font-size:12px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#f3edff;color:#211533;padding:11px 17px;border-radius:12px;font-weight:750;font-size:12px;z-index:30;transition:.2s;box-shadow:0 12px 40px #0005}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal-bg{position:fixed;inset:0;background:#05040bdc;backdrop-filter:blur(8px);z-index:20;display:none;place-items:center;padding:15px}
+.modal-bg.open{display:grid}
+.modal{width:min(480px,100%);max-height:90vh;overflow:auto;padding:22px;border:1px solid #ffffff20;border-radius:20px;background:#191624;box-shadow:0 25px 90px #0008}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-head button{background:transparent;border:0;font-size:23px;color:var(--muted)}
+.light{--bg:#f5f2fb;--panel:#fff;--panel2:#f1edf9;--line:#e2dcec;--text:#241d32;--muted:#797187;--purple:#8665eb;background:radial-gradient(ellipse at 80% 0%,#c2aeff38,transparent 40%),var(--bg)}
+.light .sidebar{background:#f7f4fcdd;border-color:#e2dcec}
+.light .card,.light .stat,.light .insight{background:#ffffffdd;border-color:#e5deef}
+.light .hero{background:linear-gradient(135deg,#eee6ff,#fff)}
+.light .ring:before{background:#fff}
+.light .field input,.light .field select{background:#fff;color:var(--text)}
+.light .task{background:#fff;border-color:#ece6f3}
+.light .sidebar-bottom{background:linear-gradient(135deg,#ece4ff,#fff)}
+.light .modal{background:#fff}
+.mobile-nav{display:none}
+@media(max-width:1000px){
+ .app{grid-template-columns:70px 1fr}.sidebar{padding:22px 8px;align-items:center}
+ .brand .brand-copy,.nav-label,.nav-text,.nav-count,.sidebar-bottom{display:none}
+ .nav{width:100%}.nav button{justify-content:center;padding:13px 0}
+ .hero-grid{grid-template-columns:1.1fr .9fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:680px){
+ .app{display:block}.sidebar{display:none}.main{padding:17px 13px 96px}
+ .topbar{margin-bottom:25px}.heading{align-items:flex-start;flex-direction:column}
+ .heading h1{font-size:31px}.heading>.btn{width:100%}
+ .hero-grid,.two-col,.timer-layout{grid-template-columns:1fr}
+ .hero{min-height:220px}.card{padding:16px;border-radius:18px}
+ .stats{gap:9px;margin:12px 0 22px}.stat{padding:13px;border-radius:15px}
+ .stat strong{font-size:23px}.stat-top{font-size:10px}
+ .section-head{margin:22px 0 12px}.task{grid-template-columns:45px 3px minmax(0,1fr) auto;gap:8px;padding:11px 7px}
+ .task-time{font-size:10px}.task-title{font-size:11px}.task-meta{font-size:9px}
+ .habit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .habit-card{padding:14px}.habit-card h3{font-size:12px}.habit-card .emoji{width:40px;height:40px}
+ .insights{grid-template-columns:1fr;gap:8px}.insight{display:flex;align-items:center;justify-content:space-between}
+ .insight strong{margin:0}.timer-face{font-size:72px}
+ .mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:10;bottom:0;left:0;right:0;padding:8px 5px calc(8px + env(safe-area-inset-bottom));background:#12101eed;border-top:1px solid #ffffff15;backdrop-filter:blur(20px)}
+ .light .mobile-nav{background:#ffffffed;border-color:#e2dcec}
+ .mobile-nav button{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;padding:4px 0}
+ .mobile-nav button span{font-size:19px}.mobile-nav button.active{color:var(--purple)}
+ .chart{gap:7px}.chart-label,.chart-value{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="logo">r.</div><div class="brand-copy"><b>ROUTINELY</b><small>DESIGN YOUR DAY</small></div></div>
+ <div><div class="nav-label">WORKSPACE</div><nav class="nav">
+  <button class="active" data-page="dashboard"><span class="nav-icon">◈</span><span class="nav-text">Dashboard</span></button>
+  <button data-page="routine"><span class="nav-icon">☷</span><span class="nav-text">My routine</span><span class="nav-count" id="navCount">0</span></button>
+  <button data-page="habits"><span class="nav-icon">✳</span><span class="nav-text">Habits</span></button>
+  <button data-page="focus"><span class="nav-icon">◷</span><span class="nav-text">Focus mode</span></button>
+  <button data-page="insights"><span class="nav-icon">⌁</span><span class="nav-text">Insights</span></button>
+ </nav></div>
+ <div><div class="nav-label">PERSONAL</div><nav class="nav"><button data-page="settings"><span class="nav-icon">⚙</span><span class="nav-text">Settings</span></button></nav></div>
+ <div class="sidebar-bottom"><div style="font-size:23px">✦</div><b>Your best days start here.</b><p>Small actions. Remarkable progress.</p><button class="btn primary" data-page="insights">View progress ↗</button></div>
+</aside>
+<main class="main">
+<header class="topbar"><div class="muted">Workspace / <b id="crumb">Dashboard</b><div id="dateNow"></div></div><div class="actions"><button class="icon-btn" id="themeBtn" title="Toggle theme">☼</button><button class="icon-btn" id="notificationBtn" title="Enable notifications">♧</button><button class="avatar" id="avatar">A</button></div></header>
+
+<section class="page active" id="page-dashboard">
+ <div class="heading"><div><div class="eyebrow" id="greeting">YOUR DAY, YOUR PACE</div><h1 id="welcome">Good evening, Alex ✦</h1><p id="welcomeSub">A little progress every day adds up.</p></div><button class="btn primary" id="addTask">＋ Add a task</button></div>
+ <div class="grid hero-grid">
+  <div class="card hero"><div class="eyebrow">MAKE TODAY COUNT</div><h2>Build a day<br>you feel good about.</h2><p>Stay present, protect your focus, and keep showing up for the things that matter.</p><div class="row"><button class="btn primary" data-page="routine">View my routine ↗</button><button class="btn" data-page="focus">◷ Start focus</button></div></div>
+  <div class="card center"><div class="card-title"><h3>Daily progress</h3><span class="muted" id="progressDate">Today</span></div><div class="ring" id="ring"><div class="ring-inner"><strong id="percent">0%</strong><small>COMPLETED</small></div></div><div class="muted" id="progressCaption">Your day is full of possibilities.</div></div>
+ </div>
+ <div class="grid stats">
+  <div class="stat"><div class="stat-top">Tasks completed <span class="stat-icon">✓</span></div><strong id="taskStat">0/0</strong><small id="taskStatSub">Keep it moving</small></div>
+  <div class="stat"><div class="stat-top">Habit streak <span class="stat-icon">✳</span></div><strong id="streakStat">0 days</strong><small>Consistency wins</small></div>
+  <div class="stat"><div class="stat-top">Focus time <span class="stat-icon">◷</span></div><strong id="focusStat">0 min</strong><small>Today's sessions</small></div>
+  <div class="stat"><div class="stat-top">Habits today <span class="stat-icon">✦</span></div><strong id="habitStat">0/0</strong><small>One step at a time</small></div>
+ </div>
+ <div class="grid two-col">
+  <div><div class="section-head" style="margin-top:0"><div><h2>Today's routine</h2><p>Your day, one step at a time.</p></div><button class="btn" data-page="routine">See all ↗</button></div><div class="card"><div class="card-title"><h3>Schedule</h3><span class="muted" id="taskCount">0 tasks</span></div><div class="task-list" id="dashboardTasks"></div></div></div>
+  <div><div class="section-head" style="margin-top:0"><div><h2>Daily habits</h2><p>Little things become big changes.</p></div><button class="btn" data-page="habits">Manage ↗</button></div><div class="card"><div class="card-title"><h3>Your habits</h3><span class="muted" id="habitCount">0 habits</span></div><div class="habit-list" id="dashboardHabits"></div></div></div>
+ </div>
+</section>
+
+<section class="page" id="page-routine">
+ <div class="heading"><div><div class="eyebrow">MAKE SPACE FOR WHAT MATTERS</div><h1>My routine</h1><p>Shape your day around the life you want.</p></div><button class="btn primary" id="addTask2">＋ Create task</button></div>
+ <div class="card"><div class="card-title"><h3>Your schedule</h3><span class="muted" id="routineSummary">0 completed</span></div><div class="filters" id="filters"><button class="filter active" data-filter="all">All tasks</button><button class="filter" data-filter="open">To do</button><button class="filter" data-filter="done">Completed</button></div><div class="task-list" id="allTasks"></div></div>
+</section>
+
+<section class="page" id="page-habits">
+ <div class="heading"><div><div class="eyebrow">SMALL WINS, EVERY DAY</div><h1>Your habits</h1><p>Build consistency without chasing perfection.</p></div><button class="btn primary" id="addHabit">＋ Add habit</button></div>
+ <div class="grid stats"><div class="stat"><div class="stat-top">Today's habits <span class="stat-icon">✓</span></div><strong id="habitDoneStat">0/0</strong></div><div class="stat"><div class="stat-top">Best streak <span class="stat-icon">✳</span></div><strong id="bestStreak">0 days</strong></div><div class="stat"><div class="stat-top">Consistency <span class="stat-icon">⌁</span></div><strong id="consistency">0%</strong></div><div class="stat"><div class="stat-top">Total habits <span class="stat-icon">✦</span></div><strong id="totalHabits">0</strong></div></div>
+ <div class="grid habit-grid" id="habitGrid"></div>
+</section>
+
+<section class="page" id="page-focus">
+ <div class="heading"><div><div class="eyebrow">ONE THING AT A TIME</div><h1>Focus mode</h1><p>Give one task your full attention. The rest can wait.</p></div><span class="muted">FOCUS STUDIO</span></div>
+ <div class="grid timer-layout"><div class="card timer-card"><div class="timer-modes"><button class="filter active" data-min="25" data-mode="Focus">Focus · 25m</button><button class="filter" data-min="5" data-mode="Short break">Break · 5m</button><button class="filter" data-min="15" data-mode="Long break">Long break · 15m</button></div><div class="orb">✦</div><div class="eyebrow" id="timerMode">FOCUS SESSION</div><div class="timer-face" id="timerDisplay">25:00</div><div class="muted" id="timerStatus">Ready when you are.</div><div class="row" style="justify-content:center;margin:22px 0"><button class="btn primary" id="timerStart">▶ Start focus</button><button class="btn" id="timerReset">↺ Reset</button></div><div class="muted">Keep this tab open while your timer runs.</div></div>
+ <div class="card"><div class="card-title"><h3>Focus summary</h3><span class="muted">Today</span></div><div class="orb" style="width:75px;height:75px;font-size:26px;box-shadow:none">◷</div><div class="center"><h2 id="focusSummary">0 min</h2><span class="muted">total focused today</span></div><div class="bar-wrap" style="margin:20px 0"><div class="bar" id="focusBar"></div></div><div class="settings-row"><div><strong>Daily focus goal</strong><p>Make room for deep work.</p></div><strong id="focusGoalLabel">60 min</strong></div><button class="btn" id="changeGoal" style="width:100%;margin-top:15px">Change daily goal</button><div class="settings-row" style="margin-top:10px"><div><strong>Sessions completed</strong><p>Finished focus blocks today</p></div><strong id="sessionCount">0</strong></div></div></div>
+</section>
+
+<section class="page" id="page-insights">
+ <div class="heading"><div><div class="eyebrow">NOTICE YOUR PROGRESS</div><h1>Your insights</h1><p>Progress isn't perfection. It's showing up again.</p></div><button class="btn" id="exportBtn">⇩ Export backup</button></div>
+ <div class="card"><div class="card-title"><h3>Task completion</h3><span class="muted">Last 7 days</span></div><div class="chart" id="weeklyChart"></div><div class="grid insights"><div class="insight"><span>Tasks completed today</span><strong id="insightTasks">0</strong></div><div class="insight"><span>Average completion</span><strong id="average">0%</strong></div><div class="insight"><span>Total focus minutes</span><strong id="insightFocus">0</strong></div></div></div>
+ <div class="card" style="margin-top:16px"><div class="card-title"><h3>Your data</h3><span class="muted">Stored on this device</span></div><p class="muted">Your routine is saved in this browser. Export a backup to keep a copy or move it to another device.</p><div class="row"><button class="btn" id="exportBtn2">Export backup</button><button class="btn" id="importBtn">Import backup</button><input type="file" id="importFile" accept=".json,application/json" hidden></div><p class="muted" id="summaryText" style="margin-top:18px"></p></div>
+</section>
+
+<section class="page" id="page-settings">
+ <div class="heading"><div><div class="eyebrow">MAKE IT YOURS</div><h1>Settings</h1><p>Your routine should fit your life.</p></div></div>
+ <div class="grid two-col">
+  <div class="card"><div class="card-title"><h3>Your profile</h3><span class="muted">PERSONAL</span></div><form id="profileForm">
+   <div class="field"><label for="profileName">Your name</label><input id="profileName" maxlength="40" placeholder="What should we call you?"></div>
+   <div class="field"><label for="profileAge">Age (optional)</label><input id="profileAge" type="number" min="1" max="120" placeholder="Age"></div>
+   <div class="field"><label for="wake">Wake-up time</label><input id="wake" type="time"></div>
+   <div class="field"><label for="sleep">Target bedtime</label><input id="sleep" type="time"></div>
+   <div class="field"><label for="goal">Main goal</label><select id="goal"><option>Build consistency</option><option>Study better</option><option>Improve fitness</option><option>Protect my focus</option><option>Feel less stressed</option><option>Build a balanced life</option></select></div>
+   <button class="btn primary">Save profile</button>
+  </form></div>
+  <div class="card"><div class="card-title"><h3>Preferences</h3><span class="muted">EXPERIENCE</span></div>
+   <div class="settings-row"><div><strong>Light appearance</strong><p>Switch between light and dark themes.</p></div><button class="switch" id="themeSwitch" aria-label="Toggle theme"></button></div>
+   <div class="settings-row"><div><strong>Focus notifications</strong><p>Notify when a timer finishes, if allowed.</p></div><button class="switch" id="notifySwitch" aria-label="Toggle notifications"></button></div>
+   <div class="settings-row"><div><strong>Daily focus goal</strong><p>Minutes of focused work per day.</p></div><strong id="settingsGoal">60 min</strong></div>
+   <div class="settings-row"><div><strong>Reset all app data</strong><p>Delete routines, habits and settings.</p></div><button class="btn danger" id="resetBtn">Reset</button></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>About Routinely</h3><p class="muted">A personal routine planner. Your data stays in local browser storage. This single-file version does not sync across devices or connect to an online service.</p></div>
+</section>
+</main>
+</div>
+
+<nav class="mobile-nav" id="mobileNav"><button class="active" data-page="dashboard"><span>◈</span>Home</button><button data-page="routine"><span>☷</span>Routine</button><button data-page="habits"><span>✳</span>Habits</button><button data-page="focus"><span>◷</span>Focus</button><button data-page="insights"><span>⌁</span>Insights</button></nav>
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="taskModal"><div class="modal"><div class="modal-head"><h2 id="taskModalHeading">Create a task</h2><button data-close="taskModal">×</button></div><form id="taskForm">
+<input id="editTaskId" type="hidden">
+<div class="field"><label for="taskTitle">Task name</label><input id="taskTitle" required maxlength="100" placeholder="e.g. Morning workout"></div>
+<div class="grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="taskTime">Start time</label><input id="taskTime" type="time" value="09:00" required></div><div class="field"><label for="taskDuration">Duration (minutes)</label><input id="taskDuration" type="number" min="5" max="720" value="30" required></div></div>
+<div class="grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="taskCategory">Category</label><select id="taskCategory"><option>Personal</option><option>Study</option><option>Work</option><option>Fitness</option><option>Wellness</option><option>Break</option></select></div><div class="field"><label for="taskPriority">Priority</label><select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select></div></div>
+<div class="field"><label for="taskNote">Notes (optional)</label><input id="taskNote" maxlength="250" placeholder="Anything to remember?"></div>
+<div class="row" style="justify-content:flex-end"><button class="btn" type="button" data-close="taskModal">Cancel</button><button class="btn primary">Save task</button></div>
+</form></div></div>
+
+<div class="modal-bg" id="habitModal"><div class="modal"><div class="modal-head"><h2 id="habitModalHeading">Add a habit</h2><button data-close="habitModal">×</button></div><form id="habitForm">
+<input id="editHabitId" type="hidden">
+<div class="field"><label for="habitTitle">Habit name</label><input id="habitTitle" required maxlength="70" placeholder="e.g. Read 20 minutes"></div>
+<div class="grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="habitEmoji">Emoji</label><input id="habitEmoji" maxlength="5" value="✦"></div><div class="field"><label for="habitTarget">Schedule</label><select id="habitTarget"><option>Every day</option><option>Weekdays</option><option>Weekends</option></select></div></div>
+<div class="field"><label for="habitDescription">Why does it matter? (optional)</label><input id="habitDescription" maxlength="120" placeholder="A reason to keep going"></div>
+<div class="row" style="justify-content:flex-end"><button class="btn" type="button" data-close="habitModal">Cancel</button><button class="btn primary">Save habit</button></div>
+</form></div></div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const today=()=>{let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
+const fresh=()=>({profile:{name:'Alex',age:'',wake:'07:00',sleep:'22:30',goal:'Build consistency'},theme:'dark',focusGoal:60,notifications:false,tasks:[
+{id:uid(),title:'Wake up & hydrate',time:'07:00',duration:15,category:'Wellness',priority:'High',note:'Start slowly and drink a glass of water.',done:false,doneDate:''},
+{id:uid(),title:'Morning movement',time:'07:30',duration:30,category:'Fitness',priority:'High',note:'Stretch, walk, or do a quick workout.',done:false,doneDate:''},
+{id:uid(),title:'Deep work session',time:'09:00',duration:90,category:'Work',priority:'High',note:'One important task. Keep distractions away.',done:false,doneDate:''},
+{id:uid(),title:'Learning time',time:'11:00',duration:45,category:'Study',priority:'Medium',note:'Make steady progress on one subject.',done:false,doneDate:''},
+{id:uid(),title:'Evening reset',time:'20:30',duration:20,category:'Personal',priority:'Low',note:'Reflect on the day and prepare for tomorrow.',done:false,doneDate:''}
+],habits:[
+{id:uid(),title:'Drink enough water',emoji:'💧',target:'Every day',description:'Care for your energy',checks:{}},
+{id:uid(),title:'Read 20 minutes',emoji:'📚',target:'Every day',description:'A little learning each day',checks:{}},
+{id:uid(),title:'Move your body',emoji:'⚡',target:'Every day',description:'Movement is a gift',checks:{}},
+{id:uid(),title:'Mindful pause',emoji:'🌿',target:'Every day',description:'Take a breath and reset',checks:{}},
+{id:uid(),title:'Plan tomorrow',emoji:'✍️',target:'Weekdays',description:'Give your future self a head start',checks:{}},
+{id:uid(),title:'Sleep on time',emoji:'🌙',target:'Every day',description:'Rest is productive too',checks:{}}
+],focus:{minutes:{},sessions:{}},history:{}});
+let state;
+try{state=JSON.parse(localStorage.getItem('routinely-v1'))||fresh()}catch(e){state=fresh()}
+function normalize(){state.profile=state.profile||fresh().profile;state.tasks=Array.isArray(state.tasks)?state.tasks:[];state.habits=Array.isArray(state.habits)?state.habits:[];state.focus=state.focus||{minutes:{},sessions:{}};state.focus.minutes=state.focus.minutes||{};state.focus.sessions=state.focus.sessions||{};state.history=state.history||{};state.focusGoal=Number(state.focusGoal)||60;state.theme=state.theme||'dark';state.habits.forEach(h=>h.checks=h.checks||{})}
+normalize();
+let filter='all',timerTotal=1500,timerLeft=1500,timerMode='Focus',timerInterval=null,timerRunning=false,timerEnd=0,toastTimeout;
+function save(){try{localStorage.setItem('routinely-v1',JSON.stringify(state))}catch(e){toast('Storage is full; export a backup.')}}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>$('toast').classList.remove('show'),2400)}
+function dateText(){return new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})}
+function doneTask(t){return t.done&&t.doneDate===today()}
+function dueHabit(h,d=new Date()){let w=d.getDay();return h.target==='Every day'||(h.target==='Weekdays'&&w>0&&w<6)||(h.target==='Weekends'&&(w===0||w===6))}
+function doneHabit(h){return !!h.checks[today()]}
+function streak(h){let d=new Date(),n=0;if(!h.checks[today()])d.setDate(d.getDate()-1);for(let i=0;i<370;i++){let k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(!h.checks[k])break;n++;d.setDate(d.getDate()-1)}return n}
+function getStats(){let due=state.habits.filter(h=>dueHabit(h)),done=due.filter(doneHabit).length,total=state.tasks.length,completed=state.tasks.filter(doneTask).length;return{total,completed,pct:total?Math.round(completed/total*100):0,due:due.length,habitDone:done,habitPct:due.length?Math.round(done/due.length*100):0,focus:state.focus.minutes[today()]||0}}
+function applyTheme(){document.body.classList.toggle('light',state.theme==='light');$('themeBtn').textContent=state.theme==='light'?'☾':'☼';$('themeSwitch').classList.toggle('on',state.theme==='light')}
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));$('crumb').textContent=({dashboard:'Dashboard',routine:'My routine',habits:'Habits',focus:'Focus mode',insights:'Insights',settings:'Settings'})[name]||name;window.scrollTo({top:0,behavior:'smooth'});if(name==='settings')renderSettings()}
+function taskHTML(t,compact=false){let done=doneTask(t),colors={Work:'#a68aff',Study:'#7daaff',Fitness:'#d4ff70',Wellness:'#ff91ce',Personal:'#f3b56c',Break:'#72d9ca'};return `<div class="task ${done?'completed':''}" style="--task-color:${colors[t.category]||'#a68aff'}"><div class="task-time">${esc(t.time)}</div><div class="task-line"></div><div><div class="task-title">${esc(t.title)}</div><div class="task-meta">${esc(t.category)} · ${t.duration} min${t.priority==='High'?' · High priority':''}${!compact&&t.note?'<br>'+esc(t.note):''}</div></div><div class="row" style="gap:4px;align-items:center"><button class="check ${done?'done':''}" data-action="task-toggle" data-id="${t.id}" aria-label="Toggle task">✓</button>${compact?'':`<button class="icon-btn" style="width:30px;height:30px" data-action="task-edit" data-id="${t.id}" title="Edit">✎</button><button class="icon-btn" style="width:30px;height:30px" data-action="task-delete" data-id="${t.id}" title="Delete">×</button>`}</div></div>`}
+function habitHTML(h){let done=doneHabit(h);return `<div class="habit"><div class="emoji">${esc(h.emoji||'✦')}</div><div class="habit-info"><strong>${esc(h.title)}</strong><small>${esc(h.target)} · ${streak(h)} day streak</small><div class="bar-wrap"><div class="bar" style="width:${done?100:0}%"></div></div></div><button class="habit-check ${done?'done':''}" data-action="habit-toggle" data-id="${h.id}">${done?'✓':'○'}</button></div>`}
+function renderDashboard(){let s=getStats(),name=state.profile.name||'there',hour=new Date().getHours();$('greeting').textContent=hour<12?'A FRESH START AWAITS':hour<18?'MAKE THIS AFTERNOON COUNT':'YOUR DAY, YOUR PACE';$('welcome').innerHTML=`Good ${hour<12?'morning':hour<18?'afternoon':'evening'}, ${esc(name)} <span style="color:var(--purple)">✦</span>`;$('welcomeSub').textContent='Today is another chance to '+(state.profile.goal||'make progress').toLowerCase()+'.';$('avatar').textContent=(name[0]||'A').toUpperCase();$('dateNow').textContent=dateText();$('progressDate').textContent=new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'});$('ring').style.setProperty('--progress',s.pct*3.6+'deg');$('percent').textContent=s.pct+'%';$('progressCaption').textContent=s.pct===100&&s.total?'You did it. Take a moment to be proud.':s.pct>=50?'You are building real momentum.':s.total?'One intentional step at a time.':'Add a task to begin your day.';$('taskStat').textContent=s.completed+'/'+s.total;$('taskStatSub').textContent=s.pct===100&&s.total?'All tasks complete!':'Keep it moving';$('streakStat').textContent=Math.max(0,...state.habits.map(streak))+' days';$('focusStat').textContent=s.focus>=60?(s.focus/60).toFixed(1)+' hr':s.focus+' min';$('habitStat').textContent=s.habitDone+'/'+s.due;$('taskCount').textContent=s.total+' tasks';$('habitCount').textContent=state.habits.length+' habits';$('navCount').textContent=state.tasks.filter(t=>!doneTask(t)).length;let tasks=[...state.tasks].sort((a,b)=>a.time.localeCompare(b.time));$('dashboardTasks').innerHTML=tasks.slice(0,5).map(t=>taskHTML(t,true)).join('')||'<div class="empty">No tasks yet. Add one to shape your day.</div>';$('dashboardHabits').innerHTML=state.habits.slice(0,5).map(habitHTML).join('')||'<div class="empty">Add a habit to get started.</div>'}
+function renderRoutine(){let s=getStats();$('routineSummary').textContent=s.completed+' of '+s.total+' completed';let tasks=[...state.tasks].sort((a,b)=>a.time.localeCompare(b.time)).filter(t=>filter==='all'||(filter==='done'?doneTask(t):!doneTask(t)));$('allTasks').innerHTML=tasks.map(t=>taskHTML(t)).join('')||'<div class="empty">No tasks in this view.</div>';document.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter))}
+function renderHabits(){let due=state.habits.filter(h=>dueHabit(h)),n=due.filter(doneHabit).length;$('habitDoneStat').textContent=n+'/'+due.length;$('bestStreak').textContent=Math.max(0,...state.habits.map(streak))+' days';$('consistency').textContent=(due.length?Math.round(n/due.length*100):0)+'%';$('totalHabits').textContent=state.habits.length;$('habitGrid').innerHTML=state.habits.map(h=>`<div class="card habit-card"><button class="habit-check ${doneHabit(h)?'done':''}" data-action="habit-toggle" data-id="${h.id}">${doneHabit(h)?'✓':'○'}</button><div class="emoji">${esc(h.emoji||'✦')}</div><h3>${esc(h.title)}</h3><p>${esc(h.description||h.target)}</p><div class="bar-wrap"><div class="bar" style="width:${doneHabit(h)?100:0}%"></div></div><div class="streak">✳ ${streak(h)} day streak · ${doneHabit(h)?'Done today':'Keep going'}</div><div class="row" style="margin-top:13px"><button class="btn" data-action="habit-edit" data-id="${h.id}">Edit</button><button class="btn danger" data-action="habit-delete" data-id="${h.id}">Delete</button></div></div>`).join('')||'<div class="card empty" style="grid-column:1/-1">No habits yet. Add one small habit to build.</div>'}
+function renderFocus(){let n=state.focus.minutes[today()]||0;$('focusSummary').textContent=n+' min';$('sessionCount').textContent=state.focus.sessions[today()]||0;$('focusGoalLabel').textContent=state.focusGoal+' min';$('settingsGoal').textContent=state.focusGoal+' min';$('focusBar').style.width=Math.min(100,n/state.focusGoal*100)+'%'}
+function renderInsights(){let days=[];for(let i=6;i>=0;i--){let d=new Date();d.setDate(d.getDate()-i);let k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'),h=state.history[k]||{};days.push({label:d.toLocaleDateString(undefined,{weekday:'short'}),done:+h.done||0,total:+h.total||0,pct:h.total?Math.round(h.done/h.total*100):0})}let s=getStats();state.history[today()]={done:s.completed,total:s.total};let max=Math.max(1,...days.map(d=>d.total));$('weeklyChart').innerHTML=days.map(d=>`<div class="chart-col"><span class="chart-value">${d.total?d.pct+'%':'—'}</span><div class="chart-bar" style="height:${Math.max(3,d.total?d.done/max*120:3)}px;opacity:${d.total?1:.25}" title="${d.done} of ${d.total} tasks"></div><span class="chart-label">${d.label}</span></div>`).join('');$('insightTasks').textContent=s.completed;$('average').textContent=Math.round(days.reduce((a,d)=>a+d.pct,0)/days.length)+'%';$('insightFocus').textContent=s.focus;$('summaryText').textContent=s.pct>=75?'You are making strong progress today. Keep your routine realistic and protect time to rest.':s.completed?'You have started building momentum. Choose one important task to complete next.':'Your personal summary will become more useful as you complete tasks over several days.';save()}
+function renderSettings(){$('profileName').value=state.profile.name||'';$('profileAge').value=state.profile.age||'';$('wake').value=state.profile.wake||'07:00';$('sleep').value=state.profile.sleep||'22:30';$('goal').value=state.profile.goal||'Build consistency';$('themeSwitch').classList.toggle('on',state.theme==='light');$('notifySwitch').classList.toggle('on',!!state.notifications)}
+function renderAll(){renderDashboard();renderRoutine();renderHabits();renderFocus();renderInsights();renderSettings()}
+function openModal(id){$(id).classList.add('open');document.body.style.overflow='hidden'}
+function closeModal(id){$(id).classList.remove('open');document.body.style.overflow=''}
+function openTask(t){$('taskForm').reset();$('editTaskId').value=t?.id||'';$('taskModalHeading').textContent=t?'Edit task':'Create a task';$('taskTitle').value=t?.title||'';$('taskTime').value=t?.time||'09:00';$('taskDuration').value=t?.duration||30;$('taskCategory').value=t?.category||'Personal';$('taskPriority').value=t?.priority||'Medium';$('taskNote').value=t?.note||'';openModal('taskModal');setTimeout(()=>$('taskTitle').focus(),50)}
+function openHabit(h){$('habitForm').reset();$('editHabitId').value=h?.id||'';$('habitModalHeading').textContent=h?'Edit habit':'Add a habit';$('habitTitle').value=h?.title||'';$('habitEmoji').value=h?.emoji||'✦';$('habitTarget').value=h?.target||'Every day';$('habitDescription').value=h?.description||'';openModal('habitModal');setTimeout(()=>$('habitTitle').focus(),50)}
+function downloadBackup(){let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='routinely-backup-'+today()+'.json';a.click();URL.revokeObjectURL(url);toast('Backup exported')}
+function importBackup(file){if(!file)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.tasks)||!Array.isArray(x.habits)||!x.profile)throw 0;if(!confirm('Replace your current data with this backup?'))return;state=x;normalize();save();applyTheme();renderAll();toast('Backup restored')}catch(e){toast('Invalid Routinely backup file')}};r.readAsText(file)}
+function updateTimer(){let left=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));timerLeft=left;$('timerDisplay').textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');if(left===0){clearInterval(timerInterval);timerInterval=null;timerRunning=false;if(timerMode==='Focus'){state.focus.minutes[today()]=(state.focus.minutes[today()]||0)+Math.round(timerTotal/60);state.focus.sessions[today()]=(state.focus.sessions[today()]||0)+1;save();renderAll()}$('timerStatus').textContent='Session complete. Take a breath and celebrate.';$('timerStart').textContent='▶ Start again';toast(timerMode+' session complete!');if(state.notifications&&'Notification'in window&&Notification.permission==='granted')new Notification('Routinely',{body:timerMode+' session complete.'})}else $('timerStart').textContent=timerRunning?'Ⅱ Pause':'▶ '+(timerLeft<timerTotal?'Resume':'Start focus')}
+function stopTimer(){if(timerInterval)clearInterval(timerInterval);timerInterval=null;timerRunning=false}
+function toggleTheme(){state.theme=state.theme==='light'?'dark':'light';save();applyTheme();renderSettings();toast(state.theme==='light'?'Light theme enabled':'Dark theme enabled')}
+function toggleTask(id){let t=state.tasks.find(t=>t.id===id);if(!t)return;t.done=!doneTask(t);t.doneDate=t.done?today():'';save();renderAll();toast(t.done?'Task completed ✓':'Task marked incomplete')}
+function toggleHabit(id){let h=state.habits.find(h=>h.id===id);if(!h)return;if(h.checks[today()])delete h.checks[today()];else h.checks[today()]=true;save();renderAll();toast(h.checks[today()]?'Habit checked off ✦':'Habit unchecked')}
+document.addEventListener('click',e=>{
+ let pg=e.target.closest('[data-page]');if(pg){showPage(pg.dataset.page);return}
+ let close=e.target.closest('[data-close]');if(close){closeModal(close.dataset.close);return}
+ let a=e.target.closest('[data-action]');if(!a)return;let id=a.dataset.id,act=a.dataset.action;
+ if(act==='task-toggle')toggleTask(id);
+ if(act==='habit-toggle')toggleHabit(id);
+ if(act==='task-edit'){let t=state.tasks.find(t=>t.id===id);if(t)openTask(t)}
+ if(act==='task-delete'){let t=state.tasks.find(t=>t.id===id);if(t&&confirm('Delete "'+t.title+'"?')){state.tasks=state.tasks.filter(t=>t.id!==id);save();renderAll();toast('Task deleted')}}
+ if(act==='habit-edit'){let h=state.habits.find(h=>h.id===id);if(h)openHabit(h)}
+ if(act==='habit-delete'){let h=state.habits.find(h=>h.id===id);if(h&&confirm('Delete "'+h.title+'"?')){state.habits=state.habits.filter(h=>h.id!==id);save();renderAll();toast('Habit deleted')}}
+});
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-bg.open').forEach(m=>closeModal(m.id))});
+$('addTask').onclick=$('addTask2').onclick=()=>openTask();
+$('addHabit').onclick=()=>openHabit();
+$('filters').onclick=e=>{let b=e.target.closest('[data-filter]');if(b){filter=b.dataset.filter;renderRoutine()}};
+$('taskForm').onsubmit=e=>{e.preventDefault();let id=$('editTaskId').value,old=state.tasks.find(t=>t.id===id),t={id:id||uid(),title:$('taskTitle').value.trim(),time:$('taskTime').value,duration:Number($('taskDuration').value),category:$('taskCategory').value,priority:$('taskPriority').value,note:$('taskNote').value.trim(),done:old?.done||false,doneDate:old?.doneDate||''};if(!t.title||t.duration<5||t.duration>720)return;if(old)Object.assign(old,t);else state.tasks.push(t);save();closeModal('taskModal');renderAll();toast(old?'Task updated':'Task added')};
+$('habitForm').onsubmit=e=>{e.preventDefault();let id=$('editHabitId').value,old=state.habits.find(h=>h.id===id),h={id:id||uid(),title:$('habitTitle').value.trim(),emoji:$('habitEmoji').value.trim()||'✦',target:$('habitTarget').value,description:$('habitDescription').value.trim(),checks:old?.checks||{}};if(!h.title)return;if(old)Object.assign(old,h);else state.habits.push(h);save();closeModal('habitModal');renderAll();toast(old?'Habit updated':'Habit added')};
+$('profileForm').onsubmit=e=>{e.preventDefault();state.profile={name:$('profileName').value.trim()||'there',age:$('profileAge').value,wake:$('wake').value,sleep:$('sleep').value,goal:$('goal').value};save();renderAll();toast('Profile saved')};
+$('themeBtn').onclick=$('themeSwitch').onclick=toggleTheme;
+$('avatar').onclick=()=>showPage('settings');
+$('notificationBtn').onclick=async()=>{if(!('Notification'in window)){toast('Notifications are not supported here.');return}try{let p=await Notification.requestPermission();state.notifications=p==='granted';save();renderSettings();toast(p==='granted'?'Focus completion notifications enabled.':'Permission was not granted.')}catch(e){toast('Could not request permission.')}};
+$('notifySwitch').onclick=()=>$('notificationBtn').click();
+document.querySelectorAll('[data-min]').forEach(b=>b.onclick=()=>{stopTimer();timerMode=b.dataset.mode;timerTotal=Number(b.dataset.min)*60;timerLeft=timerTotal;document.querySelectorAll('[data-min]').forEach(x=>x.classList.toggle('active',x===b));$('timerMode').textContent=timerMode.toUpperCase()+' SESSION';$('timerStatus').textContent='Ready when you are.';$('timerDisplay').textContent=String(Math.floor(timerLeft/60)).padStart(2,'0')+':00';$('timerStart').textContent='▶ Start focus'});
+$('timerStart').onclick=()=>{if(timerRunning){stopTimer();$('timerStatus').textContent='Paused. Resume whenever you are ready.';$('timerStart').textContent='▶ Resume'}else{if(timerLeft<=0)timerLeft=timerTotal;timerRunning=true;timerEnd=Date.now()+timerLeft*1000;$('timerStatus').textContent='You are in your focus zone.';$('timerStart').textContent='Ⅱ Pause';timerInterval=setInterval(updateTimer,250)}};
+$('timerReset').onclick=()=>{stopTimer();timerLeft=timerTotal;$('timerDisplay').textContent=String(Math.floor(timerLeft/60)).padStart(2,'0')+':00';$('timerStatus').textContent='Ready when you are.';$('timerStart').textContent='▶ Start focus'};
+$('changeGoal').onclick=()=>{let v=prompt('Daily focus goal in minutes (15–600):',state.focusGoal);if(v===null)return;let n=Number(v);if(!Number.isInteger(n)||n<15||n>600){toast('Enter a whole number from 15 to 600.');return}state.focusGoal=n;save();renderAll();toast('Focus goal updated')};
+$('exportBtn').onclick=$('exportBtn2').onclick=downloadBackup;
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=e=>{importBackup(e.target.files[0]);e.target.value=''};
+$('resetBtn').onclick=()=>{if(!confirm('Permanently delete all routines, habits and settings stored in this browser? Export a backup first if needed.'))return;stopTimer();state=fresh();save();applyTheme();renderAll();showPage('dashboard');toast('App data reset')};
+applyTheme();renderAll();
+setInterval(()=>{$('dateNow').textContent=dateText()},60000);
+</script>
+</body>
+</html>
